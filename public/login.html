@@ -1,0 +1,207 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      background-image: url('/images/back2.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+    #login-form {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(45deg, #9d47ff, #FFD700);
+      padding: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    #login-form h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+  
+    #login-form label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      color: #000;
+      
+    }
+  
+    #login-form input[type="text"],
+    #login-form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  
+    #login-form button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 1.5rem;
+      background-color: #1d4ed8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3); /* optional dark overlay */
+  backdrop-filter: blur(6px); /* 👈 this applies the blur */
+  z-index: 0;
+}
+    .checkbox-container input {
+      margin-right: 5px;
+    }
+    #login-form button:hover {
+      background-color: #2563eb;
+    }
+  
+    .checkbox-container {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+  
+    .checkbox-container input {
+      margin-right: 5px;
+    }
+  
+    .error {
+      color: red;
+      font-size: 0.85rem;
+    }
+  </style>
+
+  <title>Login</title>
+ 
+</head>
+<body>
+<div  class="container">
+  <form id="login-form">
+    <div>
+        <h1>Login Page</h1>
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter Username" />
+      <span id="username-error" class="error"></span>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter Password" />
+      <span id="password-error" class="error"></span>
+    </div>
+    <div class="checkbox-container">
+      <input type="checkbox" id="show-password" />
+      <label for="show-password">Show Password</label>
+    </div>
+    
+    <button type="submit">Login</button>
+    <p style="text-align: center;">
+      Don't have an account?
+      <a href="signup.html" style="text-decoration: none;">
+        Sign Up
+      </a></p>
+      <p id="login-error" class="error"></p>
+      <div id="signup-success" class="success-msg"></div>
+  </form>
+
+ 
+</div>
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      let username = document.getElementById("username").value.trim();
+      let password = document.getElementById("password").value;
+      let usernameError = document.getElementById("username-error");
+      let passwordError = document.getElementById("password-error");
+      usernameError.textContent = "";
+      passwordError.textContent = "";
+      if (!username || !password) {
+        if (!username) usernameError.textContent = "Username is required.";
+        if (!password) passwordError.textContent = "Password is required.";
+        return;
+      }
+      console.log("Username:", username);
+      console.log("Password:", password);
+      try {
+        const response = await fetch("http://localhost:4400/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+        console.log(result);  
+
+        if (response.ok) {
+        
+          window.location.href = `landing2.html?username=${username}`;
+        } else {
+          
+          document.getElementById("login-error").textContent = result.message || "Something went wrong.";
+        }
+      } catch (error) {
+       
+        console.error("Error during login:", error);
+        document.getElementById("login-error").textContent = "Failed to login. Please try again.";
+      }
+    });
+
+   
+    document.getElementById("username").addEventListener("input", function() {
+      let usernameError = document.getElementById("username-error");
+      usernameError.textContent = "";
+
+      if (this.value.length < 8) {
+        usernameError.textContent = "Username must be at least 8 characters";
+      }
+    });
+
+    document.getElementById("password").addEventListener("input", function() {
+      let passwordError = document.getElementById("password-error");
+      passwordError.textContent = "";
+    });
+    document.getElementById("show-password").addEventListener("change", function () {
+    const passwordField = document.getElementById("password");
+    const confirmPasswordField = document.getElementById("confirm-password");
+    const type = this.checked ? "text" : "password";
+    passwordField.type = type;
+    confirmPasswordField.type = type;
+  });
+  const username = localStorage.getItem("loggedInUser");
+
+
+  </script>
+</body>
+</html>

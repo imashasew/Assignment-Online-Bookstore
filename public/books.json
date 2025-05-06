@@ -1,0 +1,43 @@
+[
+    {
+      "id": 1,
+      "title": "Harry Potter",
+      "category": "Fiction",
+      "price": 2500,
+      "rating": 4.5,
+      "image": "./images/image1.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Kasthuri Suwada",
+      "category": "Fiction",
+      "price": 1500,
+      "rating": 4.2,
+      "image":"./images/image 2.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Madol Duwa",
+      "category": "History",
+      "price": 3000,
+      "rating": 4.7,
+      "image": "./images/image 3.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Silo Series",
+      "category": "Science",
+      "price": 2200,
+      "rating": 4.9,
+      "image": "./images/image 4.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Silo Series 2",
+      "category": "Science",
+      "price": 2200,
+      "rating": 4.9,
+      "image": "./images/image 5.jpg"
+    }
+  ]
+  

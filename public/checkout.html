@@ -1,0 +1,204 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout</title>
+  <style>
+     body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('/images/back2.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;  }
+   
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    #checkout-cart {
+      list-style-type: none;
+      padding: 0;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    #checkout-cart li {
+      background: #fff;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #checkout-total {
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .btn2{
+      display: block;
+      margin: 0 auto 30px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .checkout-btn {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .checkout-btn:hover {
+      background-color: #0056b3;
+    }
+
+    #payment-form {
+      display: none;
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #payment-form input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    #payment-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: green;
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #payment-form button:hover {
+      background-color: darkgreen;
+    }
+    #login-form {
+      position: relative;
+     
+      background: linear-gradient(45deg, #9d47ff, #FFD700);
+      padding: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      margin:0 auto;
+      max-width: 400px;
+      justify-content:  center;
+    }
+
+    #login-form h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+  
+    #login-form label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      color: #000;
+      
+    }
+  
+    #login-form input[type="text"],
+    #login-form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  
+    #login-form button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 1.5rem;
+      background-color: #1d4ed8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <form id="login-form">
+  <h2>Checkout Summary</h2>
+  <ul id="checkout-cart"></ul>
+  <p id="checkout-total"></p>
+  <button class="checkout-btn" Onclick="showPaymentForm()">Pay Now</button>
+  <button class="btn2" ><a href="landing2.html" style="text-decoration: none;">Back</a></button>
+
+  <div id="payment-form">
+    <h3>Enter Payment Details</h3>
+    <input type="text" placeholder="Full Name" required />
+    <input type="email" placeholder="Email Address" required />
+    <input type="text" placeholder="Card Number" required />
+    <input type="text" placeholder="Expiration Date (MM/YY)" required />
+    <input type="text" placeholder="CVV" required />
+    <button onclick="submitPayment()">Submit Payment</button>
+  </div>
+</form>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = localStorage.getItem("cartTotal") || 0;
+
+    const cartList = document.getElementById("checkout-cart");
+    const totalDisplay = document.getElementById("checkout-total");
+
+    if (cartList && totalDisplay) {
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.title} x ${item.qty} = LKR ${item.price * item.qty}`;
+        cartList.appendChild(li);
+      });
+
+      totalDisplay.textContent = `Total: LKR ${total}`;
+    }
+
+    function showPaymentForm() {
+      document.getElementById("payment-form").style.display = "block";
+    }
+
+    function submitPayment() {
+      alert("Payment Successful! Thank you for your purchase.");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("cartTotal");
+      window.location.href = "index.html"; 
+    }
+  </script>
+</body>
+</html>

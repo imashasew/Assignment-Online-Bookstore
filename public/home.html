@@ -1,0 +1,728 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Discovery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    
+    body {
+       margin: 0; font-family: Arial, sans-serif; background-color: #f9fafb; backdrop-filter: blur(6px); background-image: url('/images/back2.jpg');  }
+   
+       .container { max-width: 1200px; margin: auto;  padding: 1rem;   }
+
+  
+    .hero {
+      
+      color: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      justify-content: center;
+      
+    }
+
+    .hero input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
+      margin-top: 1rem;
+      color: #000;
+    }
+
+    .filters {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .filters h2, .filters h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .filters label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+
+    .filters input[type="radio"] {
+      margin-right: 0.5rem;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-left: 2rem;
+      flex: 1;
+    }
+
+    .book-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .loader {
+      border: 4px solid #eee;
+      border-top: 4px solid #2563eb;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media(max-width: 768px) {
+      .main { flex-direction: column; }
+      .books-grid { margin-left: 0; margin-top: 1rem; }
+    }
+
+    .sort-select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+    }
+
+    
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      background: linear-gradient(45deg, #9d47ff, #FFD700);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .icon-btn {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .badge {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+    }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .search-form {
+      position: relative;
+      width:20%;
+      
+    }
+
+    .search-input {
+      padding: 8px;
+      width: 100%;
+      
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-button {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: gray;
+    }
+    .add-btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: linear-gradient(45deg, #9d47ff, #FFD700);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #1d4ed8;
+}
+
+
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+
+      .mobile-menu.show {
+        display: flex;
+      }
+    }
+
+    .footer {
+    background-color: #1f2937;
+    color: white;
+    padding-top: 40px;
+    padding-bottom: 24px;
+  }
+  
+  .footer-container {
+    max-width: auto;
+   margin:0 auto;
+    padding: 0 16px;
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+  }
+  
+  .footer-section {
+    margin-bottom: 20px;
+  }
+  
+  .footer-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .footer-text {
+    color: #d1d5db;
+    margin-bottom: 16px;
+  }
+  
+  .social-icons a {
+    margin-right: 12px;
+    display: inline-block;
+    color: #d1d5db;
+    transition: color 0.3s;
+  }
+  
+  .social-icons a:hover {
+    color: #ffffff;
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 8px;
+  }
+  
+  .footer-links a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .footer-links a:hover {
+    color: #ffffff;
+  }
+  
+  .footer-contact {
+    list-style: none;
+    padding: 0;
+    color: #d1d5db;
+  }
+  
+  .footer-contact li {
+    margin-bottom: 8px;
+  }
+  
+  .footer-bottom {
+    border-top: 1px solid #374151;
+    margin-top: 32px;
+    padding-top: 24px;
+    text-align: center;
+    color: #9ca3af;
+  }
+  
+  .cart-icon {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon span {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: red;
+      border-radius: 50%;
+      padding: 3px 7px;
+      font-size: 12px;
+    }
+
+    .cart-modal {
+      display: none;
+      background: white;
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 500px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .checkout-btn {
+      background-color:#1d4ed8;
+      padding: 0.5rem;
+      border: none;
+      color: white;
+      width: 100%;
+      margin-top: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+  
+  </style>
+ 
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="logo">BookStore</a>
+  
+    <nav>
+      
+
+      <div class="icon-btn">
+        
+        <div class="cart-icon" onclick="toggleCart()">
+          🛒 Cart <span id="cart-count">0</span>
+        </div>
+       
+      </div>
+      <a href="login.html" class="btn" id="login-btn">Login</a>
+      <a href="signup.html" class="btn" id="signup-btn">Sign Up</a>
+      
+    </nav>
+
+    <button class="mobile-toggle" id="menu-toggle">☰</button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <form class="search-form" id="search-form-mobile">
+      <input type="text" class="search-input" placeholder="Search for books..." id="search-input-mobile"/>
+      <button type="submit" class="search-button">Search</button>
+    </form>
+    <a href="#" class="icon-btn">Cart</a><span class="badge" id="cart-count-mobile">0</span></a>
+    <a href="login.html" class="btn">Login</a>
+    <a href="signup.html" class="btn">Sign Up</a>
+  </div>
+</header><br><br>
+    <section class="hero">
+      
+   
+      <form id="search-form" >
+        <input style="width:50%" type="text" id="search-input" placeholder="Search by title, author, or keyword..." />
+      
+
+        <!-- Categories -->
+        <div>
+          <h3>Categories</h3>
+          <label><input type="radio" name="category" value="" checked /> All Categories</label>
+          <label><input type="radio" name="category" value="Fiction" /> Fiction</label>
+          <label><input type="radio" name="category" value="Science" /> Science</label>
+          <label><input type="radio" name="category" value="History" /> History</label>
+        </div>
+
+        <!-- Sort -->
+        <div style="margin-top: 1rem;">
+          <h3>Sort By</h3>
+          <select id="sort-select" class="sort-select" style="width:10%">
+            <option value="title">Title</option>
+            <option value="price">Price: Low to High</option>
+            <option value="rating">Rating: High to Low</option>
+          </select>
+        </div>
+      </form>
+    
+    </section>
+    
+      <!-- Books Grid -->
+      <div class="books-grid" id="books-container">
+     
+      </div>
+
+      <div class="cart-modal" id="cart-modal">
+        <h3>Your Cart</h3>
+        <div id="cart-items"></div>
+        <p id="cart-total"><strong>Total:</strong> LKR 0</p>
+        <button class="checkout-btn" > <a href="checkout.html">Checkout</a></button>
+      </div>
+    
+      <div id="loading" class="loader" style="display:none;"></div>
+    <div id="error-msg" style="color:red; text-align:center; margin-top:1rem;"></div>
+  </div>
+      </div>
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-grid">
+      
+            <!-- About -->
+            <div class="footer-section">
+              <h3 class="footer-title">BookStore</h3>
+              <p class="footer-text">
+                Your one-stop destination for all your literary needs. Discover new books, authors, and genres.
+              </p>
+              <div class="social-icons">
+                <a href="#"><img src="facebook.svg" alt="Facebook" /></a>
+                <a href="#"><img src="twitter.svg" alt="Twitter" /></a>
+                <a href="#"><img src="instagram.svg" alt="Instagram" /></a>
+              </div>
+            </div>
+      
+            <!-- Quick Links -->
+            <div class="footer-section">
+              <h3 class="footer-title">Quick Links</h3>
+              <ul class="footer-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Cart</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Register</a></li>
+              </ul>
+            </div>
+      
+            <!-- Categories -->
+            <div class="footer-section">
+              <h3 class="footer-title">Categories</h3>
+              <ul class="footer-links">
+                <li><a href="#">Fiction</a></li>
+                <li><a href="#">Science Fiction</a></li>
+                <li><a href="#">Fantasy</a></li>
+                <li><a href="#">Romance</a></li>
+              </ul>
+            </div>
+      
+            <!-- Contact -->
+            <div class="footer-section">
+              <h3 class="footer-title">Contact Us</h3>
+              <ul class="footer-contact">
+                <li>071784567890</li>
+                <li>support@bookstore.com</li>
+                <li>123 Bookshop Street, Reading City</li>
+              </ul>
+            </div>
+          </div>
+      
+          <div class="footer-bottom">
+            <p>&copy; <span id="year"></span> BookStore. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+   
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const menuToggle = document.getElementById("menu-toggle");
+          const mobileMenu = document.getElementById("mobile-menu");
+          if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener("click", () => {
+              mobileMenu.classList.toggle("show");
+            });
+          }
+      
+          const cartCountDesktop = document.getElementById("cart-count");
+          const cartCountMobile = document.getElementById("cart-count-mobile");
+          const cartItemsDiv = document.getElementById("cart-items");
+          const cartTotal = document.getElementById("cart-total");
+          const yearSpan = document.getElementById("year");
+          const searchFormMobile = document.getElementById("search-form-mobile");
+          const searchInputMobile = document.getElementById("search-input-mobile");
+          const searchForm = document.getElementById("search-form");
+          const sortSelect = document.getElementById("sort-select");
+          const booksContainer = document.getElementById("books-container");
+          const loading = document.getElementById("loading");
+          const errorMsg = document.getElementById("error-message");
+          const userButton = document.getElementById("userButton");
+      
+          let cart = [];
+          let books = [];
+      
+          function updateCartDisplay() {
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            if (cartCountDesktop) cartCountDesktop.textContent = totalItems;
+            if (cartCountMobile) cartCountMobile.textContent = totalItems;
+      
+            if (!cartItemsDiv || !cartTotal) return;
+      
+            cartItemsDiv.innerHTML = "";
+            let total = 0;
+      
+            cart.forEach(item => {
+              total += item.price * item.qty;
+              cartItemsDiv.innerHTML += `
+                <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="flex: 1;">${item.title}</span>
+                  <input type="number" min="1" value="${item.qty}" onchange="changeQty('${item.id}', this.value)" style="width: 60px;" />
+                  <span style="flex: 0 0 auto;">LKR ${item.price * item.qty}</span>
+                  <button onclick="removeFromCart('${item.id}')">Remove</button>
+                </div>
+              `;
+            });
+      
+            cartTotal.innerHTML = `<strong>Total:</strong> LKR ${total}`;
+          }
+      
+          window.changeQty = function (bookId, newQty) {
+            const item = cart.find(i => i.id === bookId);
+            const qty = parseInt(newQty);
+            if (item && qty > 0) {
+              item.qty = qty;
+            } else if (qty === 0) {
+              cart = cart.filter(i => i.id !== bookId);
+            }
+            updateCartDisplay();
+          };
+      
+          window.removeFromCart = function (bookId) {
+            const index = cart.findIndex(item => item.id === bookId);
+            if (index > -1) {
+              if (cart[index].qty > 1) {
+                cart[index].qty--;
+              } else {
+                cart.splice(index, 1);
+              }
+              updateCartDisplay();
+            }
+          };
+      
+          function toggleCart() {
+            const modal = document.getElementById("cart-modal");
+            if (modal) {
+              modal.style.display = modal.style.display === "block" ? "none" : "block";
+            }
+          }
+      
+          function checkout() {
+            if (cart.length === 0) {
+              alert("Your cart is empty.");
+              return;
+            }
+            alert("Thank you for your purchase!");
+            cart = [];
+            updateCartDisplay();
+            toggleCart();
+          }
+      
+          function saveCartToStorage() {
+            localStorage.setItem("cart", JSON.stringify(cart));
+            const total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+            localStorage.setItem("cartTotal", total);
+          }
+      
+          window.goToCheckout = function () {
+            saveCartToStorage();
+            window.location.href = "checkout.html";
+          };
+      
+          function filterAndRender() {
+            if (!books.length) return;
+      
+            loading.style.display = "block";
+            setTimeout(() => {
+              const query = document.getElementById("search-input")?.value.toLowerCase() || "";
+              const categoryInput = document.querySelector('input[name="category"]:checked');
+              const category = categoryInput ? categoryInput.value : "";
+              const sortBy = sortSelect?.value;
+      
+              let filteredBooks = books.filter((book) => {
+                const matchesQuery = book.title.toLowerCase().includes(query);
+                const matchesCategory = category === "" || book.category === category;
+                return matchesQuery && matchesCategory;
+              });
+      
+              if (sortBy === "price") {
+                filteredBooks.sort((a, b) => a.price - b.price);
+              } else if (sortBy === "rating") {
+                filteredBooks.sort((a, b) => b.rating - a.rating);
+              }
+      
+              renderBooks(filteredBooks);
+              loading.style.display = "none";
+            }, 300);
+          }
+      
+          function renderBooks(bookList) {
+            booksContainer.innerHTML = "";
+      
+            if (bookList.length === 0) {
+              booksContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center;">No books found.</div>`;
+              return;
+            }
+      
+            bookList.forEach((book) => {
+              const div = document.createElement("div");
+              div.className = "book-card";
+              div.innerHTML = `
+                <img src="${book.image}" alt="${book.title}" />
+                <h3>${book.title}</h3>
+                <p><strong>Category:</strong> ${book.category}</p>
+                <p><strong>Price:</strong> LKR ${book.price}</p>
+                <p><strong>Rating:</strong> ${book.rating}</p>
+                <button onclick="addToCart('${book.id}')">Add to Cart</button>
+              `;
+              booksContainer.appendChild(div);
+            });
+          }
+      
+          window.addToCart = function (bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            const existing = cart.find(item => item.id === book.id);
+            if (existing) {
+              existing.qty++;
+            } else {
+              cart.push({ ...book, qty: 1 });
+            }
+            updateCartDisplay();
+            alert(`${book.title} added to cart!`);
+          };
+      
+          // Load books from backend
+          fetch("http://localhost:4400/api/books")
+            .then((res) => res.json())
+            .then((data) => {
+              books = data;
+              renderBooks(books);
+              loading.style.display = "none";
+            })
+            .catch((err) => {
+              console.error("Error loading books:", err);
+              errorMsg.style.display = "block";
+              loading.style.display = "none";
+            });
+      
+          // Search & filter event listeners
+          if (searchForm) {
+            searchForm.addEventListener("submit", (e) => {
+              e.preventDefault();
+              filterAndRender();
+            });
+          }
+      
+          document.querySelectorAll('input[name="category"]').forEach((radio) => {
+            radio.addEventListener("change", filterAndRender);
+          });
+      
+          if (sortSelect) {
+            sortSelect.addEventListener("change", filterAndRender);
+          }
+      
+          if (searchFormMobile && searchInputMobile) {
+            searchFormMobile.addEventListener("submit", function (e) {
+              e.preventDefault();
+              const query = searchInputMobile.value.trim();
+              if (query) {
+                window.location.href = `/?search=${encodeURIComponent(query)}`;
+              }
+            });
+          }
+      
+          // Footer year
+          if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+          }
+      
+          // Show username if present
+          const params = new URLSearchParams(window.location.search);
+          const username = params.get("username");
+      
+          if (username && userButton) {
+            userButton.textContent = `👤 ${username}`;
+            userButton.href = "#";
+          } else if (userButton) {
+            userButton.textContent = "Sign Up";
+            userButton.href = "signup.html";
+          }
+      
+          // Global cart functions
+          window.toggleCart = toggleCart;
+          window.checkout = checkout;
+        });
+      </script>
+      
+<!-- Example Checkout Button -->
+<button onclick="goToCheckout()">Go to Checkout</button>
+      </script>
+      
+</script>
+
+</body>
+</html>

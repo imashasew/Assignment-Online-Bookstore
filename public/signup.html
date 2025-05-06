@@ -1,0 +1,221 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('/images/back2.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-box {
+      background: linear-gradient(45deg, #9d47ff, #FFD700);
+      padding: 3rem;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+.checkbox-container input {
+  margin-right: 5px;
+}
+
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .form-box input[type="text"],
+    .form-box input[type="email"],
+    .form-box input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 1rem;
+      background-color: #1d4ed8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-box button:hover {
+      background-color: #2563eb;
+    }
+  
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-container input {
+      margin-right: 5px;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .login-link a {
+      color: #e0e0ff;
+      text-decoration: underline;
+    }
+
+    .error-msg {
+      color: red;
+      font-size: 0.8rem;
+    }
+
+    .success-msg {
+      color: green;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="signup-form" class="form-box">
+      <h2>Signup</h2>
+      <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+        <div id="username-error" class="error-msg"></div> </div>
+      <div>
+        <br>
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" required />
+        <div id="email-error" class="error-msg"></div></div>
+      <div>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+        <div id="password-error" class="error-msg"></div></div>
+      <div>
+        <br>
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" required />
+        <div id="confirm-password-error" class="error-msg"></div>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="show-password" />
+        <label for="show-password">Show Password</label>
+      </div>
+      <button type="submit">Signup</button>
+      <div id="signup-success" class="success-msg"></div>
+
+      <p style="text-align: center;">
+        Already have an account?
+        <a href="login.html" style="text-decoration: none;">
+          Log in
+        </a></p>
+    </form>
+  
+    </p>
+  </div>
+
+  <script>
+    document.getElementById("signup-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+      const usernameError = document.getElementById("username-error");
+      const emailError = document.getElementById("email-error");
+      const passwordError = document.getElementById("password-error");
+      const confirmPasswordError = document.getElementById("confirm-password-error");
+      const successMessage = document.getElementById("signup-success");
+      usernameError.textContent = "";
+      emailError.textContent = "";
+      passwordError.textContent = "";
+      confirmPasswordError.textContent = "";
+      successMessage.textContent = "";
+      if (username.length < 8) {
+        usernameError.textContent = "Username must be at least 8 characters"; return;}
+      if (!email.includes('@')) {
+        emailError.textContent = "Email must contain '@'";return }
+      if (password.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters";return; }
+      if (password !== confirmPassword) {
+        confirmPasswordError.textContent = "Passwords do not match";return; }
+      try {
+        let response = await fetch("http://localhost:4400/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password }),
+        });
+
+        let result = await response.json();
+
+        if (response.ok) {
+          successMessage.textContent = "Signup successful! Redirecting...";
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+        } else {
+          usernameError.textContent = result.message || "Signup failed";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        successMessage.textContent = "An error occurred. Please try again.";
+      }
+    });
+
+    
+  document.getElementById("show-password").addEventListener("change", function () {
+    const passwordField = document.getElementById("password");
+    const confirmPasswordField = document.getElementById("confirm-password");
+    const type = this.checked ? "text" : "password";
+    passwordField.type = type;
+    confirmPasswordField.type = type;
+  });
+
+  </script>
+</body>
+</html>
